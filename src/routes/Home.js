@@ -1,13 +1,13 @@
-import { toHaveDescription } from "@testing-library/jest-dom/dist/matchers";
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { addToDo, deleteToDo } from "./store";
 
 
 function Home() {
     const [text, setText] = useState("");
-    const todo = useSelector((state) => state);
+    const toDo = useSelector((state) => state);
     const dispatch = useDispatch();
     
     const onChange = (e) => {
@@ -33,9 +33,11 @@ function Home() {
                 <button>Add</button>
             </form>
             <ul>
-                {todo.map((item) => (
+                {toDo.map((item) => (
                     <div key={item.id}>
-                        <li>{item.text}</li>
+                        <Link to={`/${item.text}`}>
+                            <li>{item.text}</li>
+                        </Link>
                         <button id={item.id} onClick={onDelete}>DEL</button>
                     </div>
                 ))}
