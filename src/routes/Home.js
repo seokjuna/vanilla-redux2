@@ -1,12 +1,13 @@
+import { toHaveDescription } from "@testing-library/jest-dom/dist/matchers";
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToDo } from "./store";
+import { addToDo, deleteToDo } from "./store";
 
 
 function Home() {
     const [text, setText] = useState("");
-    const toDo = useSelector((state) => state);
+    const todo = useSelector((state) => state);
     const dispatch = useDispatch();
     
     const onChange = (e) => {
@@ -17,7 +18,13 @@ function Home() {
         e.preventDefault();
         dispatch(addToDo(text));
         setText("");
-    }
+    };
+    
+    const onDelete = (e) => {
+        const id = e.target.id;
+        dispatch(deleteToDo(id));
+    };
+
     return (
         <>
             <h1>To Do</h1>
@@ -25,7 +32,14 @@ function Home() {
                 <input type="text" value={text} onChange={onChange} />
                 <button>Add</button>
             </form>
-            <ul>{JSON.stringify(toDo)}</ul>
+            <ul>
+                {todo.map((item) => (
+                    <div key={item.id}>
+                        <li>{item.text}</li>
+                        <button id={item.id} onClick={onDelete}>DEL</button>
+                    </div>
+                ))}
+            </ul>
         </>
     )    
 };
